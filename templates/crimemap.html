@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crime Map</title>
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9wxfrs3XwAEAl0poiZ5XdoTqztVy2udY&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <script type="text/javascript">
+      function initMap() {
+        const uluru = { lat: -25.344, lng: 131.036 }
+        const map = new google.maps.Map(document.getElementById("map-canvas"), {
+          zoom: 4,
+          center: uluru
+        })
+        const marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        })
+        google.maps.event.addListener(map, "click", function (event) {
+          new google.maps.Marker({
+            position: event.latLng,
+            map: map
+          })
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <h1>CrimeMap</h1>
+    <p>A map of recent criminal activity in the Grahamstown area.</p>
+    <div id="map-canvas" style="width: 100%; height: 500px;"></div>
+
+    <div id="newcrimeform">
+      <h2>Submit new crime</h2>
+      <form action="/submitcrime" method="POST">
+        <label for="category">Category</label>
+        <select name="category" id="category">
+          <option value="mugging">Mugging</option>
+          <option value="breakin">Break-in</option>
+        </select>
+        <label for="date">Date</label>
+        <input name="date" id="date" type="date" />
+        <label for="latitude">Latitude</label>
+        <input name="latitude" id="latitude" type="text" />
+        <label for="longitude">Longitude</label>
+        <input name="longitude" id="longitude" type="text" />
+        <label for="description">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          placeholder="A brief but detailed description of the crime"
+        ></textarea>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>
